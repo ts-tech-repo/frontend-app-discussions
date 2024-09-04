@@ -34,7 +34,7 @@ const PostLink = ({
     learnerUsername,
   } = useContext(DiscussionContext);
   const {
-    topicId, hasEndorsed, type, author, authorLabel, abuseFlagged, abuseFlaggedCount, read, commentCount,
+    topicId, hasEndorsed, type, author, authorFirstName, authorLabel, abuseFlagged, abuseFlaggedCount, read, commentCount,
     unreadCommentCount, id, pinned, previewBody, title, voted, voteCount, following, groupId, groupName, createdAt,
   } = useSelector(selectThread(postId));
   const linkUrl = discussionsPath(Routes.COMMENTS.PAGES[page], {
@@ -131,6 +131,7 @@ const PostLink = ({
           </div>
           <AuthorLabel
             author={author || intl.formatMessage(messages.anonymous)}
+            authorFirstName ={authorFirstName}
             authorLabel={authorLabel}
             labelColor={authorLabelColor && `text-${authorLabelColor}`}
           />
