@@ -132,7 +132,7 @@ const DiscussionsHome = ({ intl }) => {
           className="container-fluid d-flex flex-column p-0 w-100"
           id="main"
           tabIndex="-1"
-          style={!unAuthUser ? {height: "65vh"} : {}}
+          style={unAuthUser ? {height: "65vh"} : {}}
         >
           {!unAuthUser && (
             <>
