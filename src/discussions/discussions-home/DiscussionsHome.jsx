@@ -61,6 +61,10 @@ const DiscussionsHome = ({ intl }) => {
   const postEditorVisible = useSelector(selectPostEditorVisible);
   const provider = useSelector(selectDiscussionProvider);
   const enableInContext = useSelector(selectEnableInContext);
+  const config = useSelector((state) => state.config);
+
+  // You can now use the config state in your component
+  console.log(config, "configggg");
   const { courseNumber, courseTitle, org } = useSelector(selectCourseTabs);
   const {
     params: { page },
