@@ -13,8 +13,6 @@ import { getDiscussionsConfig, getDiscussionsSettings } from './api';
 import {
   fetchConfigDenied, fetchConfigFailed, fetchConfigRequest, fetchConfigSuccess,
 } from './slices';
-import { getConfig } from "@edx/frontend-platform";
-
 
 /**
  * Fetches the configuration data for the course
@@ -48,9 +46,6 @@ export function fetchCourseConfig(courseId) {
       console.log(error, "this is error")
       if (getHttpErrorStatus(error) === 404) {
         dispatch(fetchConfigDenied());
-        global.location.replace(
-          `${getConfig().LMS_BASE_URL}/discussions/${courseId}/not-found`
-        );
       }
       else if (getHttpErrorStatus(error) === 403) {
         dispatch(fetchConfigDenied());
