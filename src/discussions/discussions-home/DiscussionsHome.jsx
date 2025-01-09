@@ -88,140 +88,148 @@ const DiscussionsHome = ({ intl }) => {
     displaySidebar = isOnDesktop;
   }
   return (
-    <Suspense fallback={<Spinner />}>
-      <DiscussionContext.Provider
-        value={{
-          page,
-          courseId,
-          postId,
-          topicId,
-          enableInContextSidebar,
-          category,
-          learnerUsername,
-        }}
-      >
-        {!enableInContextSidebar && (
-          <Header
-            courseOrg={org}
-            courseNumber={courseNumber}
-            courseTitle={courseTitle}
-          />
-        )}
-        <div className="mx-5 mt-3 px-5" style={{ height: "fit-content" }}>
-          {(config?.status === "denied") && (
-            <Alert variant="warning" icon={WarningFilled} className="mb-3">
-              {/* <p>You must be enrolled in the course to see course content.</p> */}
-              <FormattedMessage
-                id="learning.enrollment.alert"
-                defaultMessage="You must be enrolled in the course to see discussion content."
-                description="Message shown to indicate that a user needs to enroll in a course prior to viewing the course content.  Shown as part of an alert, along with a link to enroll."
-              />
-            </Alert>
-          )}
+    <>
+      {config?.status === "in-progress" ? (
+        <div className="d-flex justify-content-center vh-100 p-4 mx-auto my-auto">
+          <Spinner animation="border" variant="primary" size="lg" />
         </div>
+      ) : (
+        <Suspense fallback={<Spinner />}>
+          <DiscussionContext.Provider
+            value={{
+              page,
+              courseId,
+              postId,
+              topicId,
+              enableInContextSidebar,
+              category,
+              learnerUsername,
+            }}
+          >
+            {!enableInContextSidebar && (
+              <Header
+                courseOrg={org}
+                courseNumber={courseNumber}
+                courseTitle={courseTitle}
+              />
+            )}
+            <div className="mx-5 mt-3 px-5" style={{ height: "fit-content" }}>
+              {config?.status === "denied" && (
+                <Alert variant="warning" icon={WarningFilled} className="mb-3">
+                  {/* <p>You must be enrolled in the course to see course content.</p> */}
+                  <FormattedMessage
+                    id="learning.enrollment.alert"
+                    defaultMessage="You must be enrolled in the course to see discussion content."
+                    description="Message shown to indicate that a user needs to enroll in a course prior to viewing the course content.  Shown as part of an alert, along with a link to enroll."
+                  />
+                </Alert>
+              )}
+            </div>
 
-        <main
-          className="container-fluid d-flex flex-column p-0 w-100"
-          id="main"
-          tabIndex="-1"
-          style={(config?.status === "denied") ? {height: "65vh"} : {}}
-        >
-          {!(config?.status === "denied") && (
-            <>
-              {!enableInContextSidebar && (
-                <CourseTabsNavigation
-                  activeTab="discussion"
-                  courseId={courseId}
-                />
-              )}
-              <div
-                className={classNames("header-action-bar", {
-                  "shadow-none border-light-300 border-bottom":
-                    enableInContextSidebar,
-                })}
-                ref={postActionBarRef}
-              >
-                <div
-                  className={classNames(
-                    "d-flex flex-row justify-content-between navbar fixed-top",
-                    {
-                      "pl-4 pr-3 py-0": enableInContextSidebar,
-                    }
+            <main
+              className="container-fluid d-flex flex-column p-0 w-100"
+              id="main"
+              tabIndex="-1"
+              style={config?.status === "denied" ? { height: "65vh" } : {}}
+            >
+              {!(config?.status === "denied") && (
+                <>
+                  {!enableInContextSidebar && (
+                    <CourseTabsNavigation
+                      activeTab="discussion"
+                      courseId={courseId}
+                    />
                   )}
-                >
-                  {!enableInContextSidebar && <NavigationBar />}
-                  <PostActionsBar />
-                </div>
-                <DiscussionsRestrictionBanner />
-              </div>
-              {provider === DiscussionProvider.LEGACY && (
-                <Suspense fallback={<Spinner />}>
-                  <Route
-                    path={[Routes.POSTS.PATH, Routes.TOPICS.CATEGORY]}
-                    component={LegacyBreadcrumbMenu}
-                  />
-                </Suspense>
-              )}
-              <div className="d-flex flex-row position-relative">
-                <Suspense fallback={<Spinner />}>
-                  <DiscussionSidebar
-                    displaySidebar={displaySidebar}
-                    postActionBarRef={postActionBarRef}
-                  />
-                </Suspense>
-                {displayContentArea && (
-                  <Suspense fallback={<Spinner />}>
-                    <DiscussionContent />
-                  </Suspense>
-                )}
-                {!displayContentArea && (
-                  <Switch>
-                    <Route
-                      path={Routes.TOPICS.PATH}
-                      component={
-                        enableInContext || enableInContextSidebar
-                          ? InContextEmptyTopics
-                          : EmptyTopics
-                      }
-                    />
-                    <Route
-                      path={Routes.POSTS.MY_POSTS}
-                      render={(routeProps) => (
-                        <EmptyPosts
-                          {...routeProps}
-                          subTitleMessage={messages.emptyMyPosts}
-                        />
+                  <div
+                    className={classNames("header-action-bar", {
+                      "shadow-none border-light-300 border-bottom":
+                        enableInContextSidebar,
+                    })}
+                    ref={postActionBarRef}
+                  >
+                    <div
+                      className={classNames(
+                        "d-flex flex-row justify-content-between navbar fixed-top",
+                        {
+                          "pl-4 pr-3 py-0": enableInContextSidebar,
+                        }
                       )}
-                    />
-                    <Route
-                      path={[
-                        Routes.POSTS.PATH,
-                        Routes.POSTS.ALL_POSTS,
-                        Routes.LEARNERS.POSTS,
-                      ]}
-                      render={(routeProps) => (
-                        <EmptyPosts
-                          {...routeProps}
-                          subTitleMessage={messages.emptyAllPosts}
-                        />
-                      )}
-                    />
-                    {isRedirectToLearners && (
+                    >
+                      {!enableInContextSidebar && <NavigationBar />}
+                      <PostActionsBar />
+                    </div>
+                    <DiscussionsRestrictionBanner />
+                  </div>
+                  {provider === DiscussionProvider.LEGACY && (
+                    <Suspense fallback={<Spinner />}>
                       <Route
-                        path={Routes.LEARNERS.PATH}
-                        component={EmptyLearners}
+                        path={[Routes.POSTS.PATH, Routes.TOPICS.CATEGORY]}
+                        component={LegacyBreadcrumbMenu}
                       />
+                    </Suspense>
+                  )}
+                  <div className="d-flex flex-row position-relative">
+                    <Suspense fallback={<Spinner />}>
+                      <DiscussionSidebar
+                        displaySidebar={displaySidebar}
+                        postActionBarRef={postActionBarRef}
+                      />
+                    </Suspense>
+                    {displayContentArea && (
+                      <Suspense fallback={<Spinner />}>
+                        <DiscussionContent />
+                      </Suspense>
                     )}
-                  </Switch>
-                )}
-              </div>
-              {!enableInContextSidebar && <DiscussionsProductTour />}
-            </>
-          )}
-        </main>
-        {!enableInContextSidebar && <Footer />}
-      </DiscussionContext.Provider>
-    </Suspense>
+                    {!displayContentArea && (
+                      <Switch>
+                        <Route
+                          path={Routes.TOPICS.PATH}
+                          component={
+                            enableInContext || enableInContextSidebar
+                              ? InContextEmptyTopics
+                              : EmptyTopics
+                          }
+                        />
+                        <Route
+                          path={Routes.POSTS.MY_POSTS}
+                          render={(routeProps) => (
+                            <EmptyPosts
+                              {...routeProps}
+                              subTitleMessage={messages.emptyMyPosts}
+                            />
+                          )}
+                        />
+                        <Route
+                          path={[
+                            Routes.POSTS.PATH,
+                            Routes.POSTS.ALL_POSTS,
+                            Routes.LEARNERS.POSTS,
+                          ]}
+                          render={(routeProps) => (
+                            <EmptyPosts
+                              {...routeProps}
+                              subTitleMessage={messages.emptyAllPosts}
+                            />
+                          )}
+                        />
+                        {isRedirectToLearners && (
+                          <Route
+                            path={Routes.LEARNERS.PATH}
+                            component={EmptyLearners}
+                          />
+                        )}
+                      </Switch>
+                    )}
+                  </div>
+                  {!enableInContextSidebar && <DiscussionsProductTour />}
+                </>
+              )}
+            </main>
+            {!enableInContextSidebar && <Footer />}
+          </DiscussionContext.Provider>
+        </Suspense>
+      )}
+    </>
   );
 };
 
