@@ -72,19 +72,15 @@ export const useSidebarVisible = () => {
 export function useCourseDiscussionData(courseId) {
   const dispatch = useDispatch();
   const { authenticatedUser } = useContext(AppContext);
-  let courseConfig;
   useEffect(() => {
     async function fetchBaseData() {
-      courseConfig = await dispatch(fetchCourseConfig(courseId));
+      await dispatch(fetchCourseConfig(courseId));
       await dispatch(fetchCourseBlocks(courseId, authenticatedUser.username));
     }
 
     fetchBaseData();
    
   }, [courseId]);
-  return{
-    courseConfig
-  }
 }
 
 export function useRedirectToThread(courseId, enableInContextSidebar) {
