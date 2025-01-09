@@ -1,23 +1,17 @@
 /* eslint-disable import/prefer-default-export */
-import snakeCase from "lodash/snakeCase";
+import snakeCase from 'lodash/snakeCase';
 
-import {
-  ensureConfig,
-  getConfig,
-  snakeCaseObject,
-} from "@edx/frontend-platform";
-import { getAuthenticatedHttpClient } from "@edx/frontend-platform/auth";
+import { ensureConfig, getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
-ensureConfig(["LMS_BASE_URL"], "Posts API service");
+ensureConfig([
+  'LMS_BASE_URL',
+], 'Posts API service');
 
-export const getCoursesApiUrl = () =>
-  `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/`;
-export const getUserProfileApiUrl = () =>
-  `${getConfig().LMS_BASE_URL}/api/user/v1/accounts`;
-export const learnerPostsApiUrl = (courseId) =>
-  `${getCoursesApiUrl()}${courseId}/learner/`;
-export const learnersApiUrl = (courseId) =>
-  `${getCoursesApiUrl()}${courseId}/activity_stats/`;
+export const getCoursesApiUrl = () => `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/`;
+export const getUserProfileApiUrl = () => `${getConfig().LMS_BASE_URL}/api/user/v1/accounts`;
+export const learnerPostsApiUrl = (courseId) => `${getCoursesApiUrl()}${courseId}/learner/`;
+export const learnersApiUrl = (courseId) => `${getCoursesApiUrl()}${courseId}/activity_stats/`;
 
 /**
  * Fetches all the learners in the given course.
@@ -26,21 +20,8 @@ export const learnersApiUrl = (courseId) =>
  * @returns {Promise<{}>}
  */
 export async function getLearners(courseId, params) {
-  try {
-    const { data } = await getAuthenticatedHttpClient().get(
-      learnersApiUrl(courseId),
-      { params }
-    );
-    return data;
-  } catch (error) {
-    const { httpErrorStatus } = error && error.customAttributes;
-    if (httpErrorStatus === 404) {
-      global.location.replace(
-        `${getConfig().LMS_BASE_URL}/discussions/${courseId}/not-found`
-      );
-    }
-    throw error;
-  }
+  const { data } = await getAuthenticatedHttpClient().get(learnersApiUrl(courseId), { params });
+  return data;
 }
 
 /**
@@ -49,19 +30,8 @@ export async function getLearners(courseId, params) {
  */
 export async function getUserProfiles(usernames) {
   const url = `${getUserProfileApiUrl()}?username=${usernames.join()}`;
-
-  try {
-    const { data } = await getAuthenticatedHttpClient().get(url);
-    return data;
-  } catch (error) {
-    const { httpErrorStatus } = error && error.customAttributes;
-    if (httpErrorStatus === 404) {
-      global.location.replace(
-        `${getConfig().LMS_BASE_URL}/discussions/${courseId}/not-found`
-      );
-    }
-    throw error;
-  }
+  const { data } = await getAuthenticatedHttpClient().get(url);
+  return data;
 }
 
 /**
@@ -85,20 +55,17 @@ export async function getUserProfiles(usernames) {
  *    pagination: {count, num_pages, next, previous}
  *  }
  */
-export async function getUserPosts(
-  courseId,
-  {
-    page,
-    pageSize,
-    textSearch,
-    orderBy,
-    status,
-    author,
-    threadType,
-    countFlagged,
-    cohort,
-  } = {}
-) {
+export async function getUserPosts(courseId, {
+  page,
+  pageSize,
+  textSearch,
+  orderBy,
+  status,
+  author,
+  threadType,
+  countFlagged,
+  cohort,
+} = {}) {
   const params = snakeCaseObject({
     page,
     pageSize,
@@ -106,25 +73,13 @@ export async function getUserPosts(
     threadType,
     orderBy: orderBy && snakeCase(orderBy),
     status,
-    requestedFields: "profile_image",
+    requestedFields: 'profile_image',
     username: author,
     countFlagged,
     groupId: cohort,
   });
 
-  try {
-    const { data } = await getAuthenticatedHttpClient().get(
-      learnerPostsApiUrl(courseId),
-      { params }
-    );
-    return data;
-  } catch (error) {
-    const { httpErrorStatus } = error && error.customAttributes;
-    if (httpErrorStatus === 404) {
-      global.location.replace(
-        `${getConfig().LMS_BASE_URL}/discussions/${courseId}/not-found`
-      );
-    }
-    throw error;
-  }
+  const { data } = await getAuthenticatedHttpClient()
+    .get(learnerPostsApiUrl(courseId), { params });
+  return data;
 }
