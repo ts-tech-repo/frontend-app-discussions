@@ -43,7 +43,10 @@ export function fetchCourseConfig(courseId) {
       dispatch(setSortedBy(learnerSort));
       dispatch(setStatusFilter(postsFilterStatus));
     } catch (error) {
-      if (getHttpErrorStatus(error) === 403) {
+      if (getHttpErrorStatus(error) === 404) {
+        dispatch(fetchConfigDenied());
+      }
+      else if (getHttpErrorStatus(error) === 403) {
         dispatch(fetchConfigDenied());
       } else {
         dispatch(fetchConfigFailed());
