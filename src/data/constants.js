@@ -199,9 +199,6 @@ export const Routes = {
     TOPIC_POST: `${BASE_PATH}/topics/:topicId/posts/:postId`,
     TOPIC_POST_EDIT: `${BASE_PATH}/topics/:topicId/posts/:postId/edit`,
   },
-  NOT_FOUND: {
-    PATH: `${BASE_PATH}/discussions/:courseId/not-found`,
-  },
 };
 
 export const PostsPages = {
