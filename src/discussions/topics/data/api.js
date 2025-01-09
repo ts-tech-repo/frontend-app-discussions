@@ -2,7 +2,6 @@
 import { getAuthenticatedHttpClient } from "@edx/frontend-platform/auth";
 
 import { getApiBaseUrl } from "../../../data/constants";
-import { getConfig } from "@edx/frontend-platform";
 
 export const getCourseTopicsApiUrl = () =>
   `${getApiBaseUrl()}/api/discussion/v1/course_topics/`;
