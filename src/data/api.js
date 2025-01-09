@@ -13,7 +13,19 @@ export async function getCourseBlocks(courseId, username) {
     block_types_filter: 'course,chapter,sequential,vertical,discussion',
     student_view_data: 'discussion',
   };
-  const { data } = await getAuthenticatedHttpClient()
-    .get(getBlocksAPIURL(), { params });
-  return data;
+
+  try {
+    const { data } = await getAuthenticatedHttpClient().get(getBlocksAPIURL(), {
+      params,
+    });
+    return data;
+  } catch (error) {
+    const { httpErrorStatus } = error && error.customAttributes;
+    if (httpErrorStatus === 404) {
+      global.location.replace(
+        `${getConfig().LMS_BASE_URL}/discussions/${courseId}/not-found`
+      );
+    }
+    throw error;
+  }
 }
