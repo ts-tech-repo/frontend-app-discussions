@@ -138,7 +138,7 @@ const DiscussionsHome = ({ intl }) => {
           tabIndex="-1"
           style={unAuthUser ? {height: "65vh"} : {}}
         >
-          {(!unAuthUser || config?.status === "denied") && (
+          {(!unAuthUser || config?.status !== "denied") && (
             <>
               {!enableInContextSidebar && (
                 <CourseTabsNavigation
