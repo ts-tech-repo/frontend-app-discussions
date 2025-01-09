@@ -120,7 +120,7 @@ const DiscussionsHome = ({ intl }) => {
           />
         )}
         <div className="mx-5 mt-3 px-5" style={{ height: "fit-content" }}>
-          {unAuthUser || config?.status === "denied" (
+          {(unAuthUser || config?.status === "denied") && (
             <Alert variant="warning" icon={WarningFilled} className="mb-3">
               {/* <p>You must be enrolled in the course to see course content.</p> */}
               <FormattedMessage
@@ -138,7 +138,7 @@ const DiscussionsHome = ({ intl }) => {
           tabIndex="-1"
           style={unAuthUser ? {height: "65vh"} : {}}
         >
-          {!unAuthUser || config?.status === "denied" (
+          {(!unAuthUser || config?.status === "denied") && (
             <>
               {!enableInContextSidebar && (
                 <CourseTabsNavigation
