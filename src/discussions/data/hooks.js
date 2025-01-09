@@ -80,10 +80,11 @@ export function useCourseDiscussionData(courseId) {
     }
 
     fetchBaseData();
-    return{
-      courseConfig
-    }
+   
   }, [courseId]);
+  return{
+    courseConfig
+  }
 }
 
 export function useRedirectToThread(courseId, enableInContextSidebar) {
