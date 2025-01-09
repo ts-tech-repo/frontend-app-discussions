@@ -27,7 +27,6 @@ import { EmptyTopic as InContextEmptyTopics } from "../in-context-topics/compone
 import messages from "../messages";
 import { selectPostEditorVisible } from "../posts/data/selectors";
 import useFeedbackWrapper from "./FeedbackWrapper";
-import NotFound from "./notFound";
 import { Alert } from "@edx/paragon";
 import { WarningFilled } from "@edx/paragon/icons";
 import { FormattedMessage } from "@edx/frontend-platform/i18n";
@@ -207,7 +206,6 @@ const DiscussionsHome = ({ intl }) => {
                         />
                       )}
                     />
-                    {/* <Route path={Routes.NOT_FOUND.PATH} component={NotFound} /> */}
                     {isRedirectToLearners && (
                       <Route
                         path={Routes.LEARNERS.PATH}
