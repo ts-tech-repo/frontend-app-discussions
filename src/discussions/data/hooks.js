@@ -72,14 +72,17 @@ export const useSidebarVisible = () => {
 export function useCourseDiscussionData(courseId) {
   const dispatch = useDispatch();
   const { authenticatedUser } = useContext(AppContext);
-
+  let courseConfig;
   useEffect(() => {
     async function fetchBaseData() {
-      await dispatch(fetchCourseConfig(courseId));
+      courseConfig = await dispatch(fetchCourseConfig(courseId));
       await dispatch(fetchCourseBlocks(courseId, authenticatedUser.username));
     }
 
     fetchBaseData();
+    return{
+      courseConfig
+    }
   }, [courseId]);
 }
 

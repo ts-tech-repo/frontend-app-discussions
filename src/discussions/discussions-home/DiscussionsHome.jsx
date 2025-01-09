@@ -74,7 +74,7 @@ const DiscussionsHome = ({ intl }) => {
   );
   const { courseId, postId, topicId, category, learnerUsername } = params;
 
-  useCourseDiscussionData(courseId);
+  const {courseConfig} = useCourseDiscussionData(courseId);
   useRedirectToThread(courseId, enableInContextSidebar);
   useFeedbackWrapper();
   /*  Display the content area if we are currently viewing/editing a post or creating one.
