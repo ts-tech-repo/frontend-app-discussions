@@ -114,7 +114,7 @@ const DiscussionsHome = ({ intl }) => {
               />
             )}
             <div className="mx-5 mt-3 px-5" style={{ height: "fit-content" }}>
-              {config?.status === "denied" && (
+              {["denied", "failed"].includes(config?.status) && (
                 <Alert variant="warning" icon={WarningFilled} className="mb-3">
                   {/* <p>You must be enrolled in the course to see course content.</p> */}
                   <FormattedMessage
@@ -130,9 +130,9 @@ const DiscussionsHome = ({ intl }) => {
               className="container-fluid d-flex flex-column p-0 w-100"
               id="main"
               tabIndex="-1"
-              style={config?.status === "denied" ? { height: "65vh" } : {}}
+              style={["denied", "failed"].includes(config?.status) ? { height: "65vh" } : {}}
             >
-              {!(config?.status === "denied") && (
+              {!["denied", "failed"].includes(config?.status) && (
                 <>
                   {!enableInContextSidebar && (
                     <CourseTabsNavigation
