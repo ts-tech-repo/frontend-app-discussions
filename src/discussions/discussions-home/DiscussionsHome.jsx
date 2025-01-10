@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
+import React, { lazy, Suspense, useRef } from "react";
 
 import classNames from "classnames";
 import { useSelector } from "react-redux";
@@ -55,11 +55,11 @@ const DiscussionSidebar = lazy(() => import("./DiscussionSidebar"));
 
 const DiscussionsHome = ({ intl }) => {
   const location = useLocation();
-  const [unAuthUser, setUnAuthUser] = useState(false);
   const postActionBarRef = useRef(null);
   const postEditorVisible = useSelector(selectPostEditorVisible);
   const provider = useSelector(selectDiscussionProvider);
   const enableInContext = useSelector(selectEnableInContext);
+  const config = useSelector((state) => state.config);
   const { courseNumber, courseTitle, org } = useSelector(selectCourseTabs);
   const {
     params: { page },
@@ -84,15 +84,6 @@ const DiscussionsHome = ({ intl }) => {
   if (displayContentArea) {
     displaySidebar = isOnDesktop;
   }
-
-  useEffect(() => {
-    if (location?.pathname.includes("not-found")) {
-      setUnAuthUser(true);
-    } else {
-      setUnAuthUser(false);
-    }
-  }, []);
-
   return (
     <Suspense fallback={<Spinner />}>
       <DiscussionContext.Provider
@@ -114,7 +105,7 @@ const DiscussionsHome = ({ intl }) => {
           />
         )}
         <div className="mx-5 mt-3 px-5" style={{ height: "fit-content" }}>
-          {unAuthUser && (
+          {(config?.status === "denied") && (
             <Alert variant="warning" icon={WarningFilled} className="mb-3">
               {/* <p>You must be enrolled in the course to see course content.</p> */}
               <FormattedMessage
@@ -130,9 +121,9 @@ const DiscussionsHome = ({ intl }) => {
           className="container-fluid d-flex flex-column p-0 w-100"
           id="main"
           tabIndex="-1"
-          style={unAuthUser ? {height: "65vh"} : {}}
+          style={(config?.status === "denied") ? {height: "65vh"} : {}}
         >
-          {!unAuthUser && (
+          {!(config?.status === "denied") && (
             <>
               {!enableInContextSidebar && (
                 <CourseTabsNavigation
