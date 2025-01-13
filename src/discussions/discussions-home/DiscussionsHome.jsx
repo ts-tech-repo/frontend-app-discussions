@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { lazy, Suspense, useRef } from "react";
+import React, { lazy, Suspense, useEffect, useRef } from "react";
 
 import classNames from "classnames";
 import { useSelector } from "react-redux";
@@ -64,6 +64,13 @@ const DiscussionsHome = ({ intl }) => {
   // You can now use the config state in your component
   console.log(config, "configggg");
   const { courseNumber, courseTitle, org } = useSelector(selectCourseTabs);
+  useEffect(() => {
+      if(!courseTitle){
+        const cTitle = document.querySelector(".course-title");
+        console.log(cTitle, "cTitle");
+        cTitle.style.borderLeft = "0px";
+      }
+  }, [courseTitle])
   const {
     params: { page },
   } = useRouteMatch(`${Routes.COMMENTS.PAGE}?`);
