@@ -68,7 +68,10 @@ const DiscussionsHome = ({ intl }) => {
       if(!courseTitle){
         const cTitle = document.querySelector(".course-title");
         console.log(cTitle, "cTitle");
-        cTitle.style.borderLeft = "0px";
+        if(cTitle){
+
+          cTitle.style.borderLeft = "0px";
+        }
       }
   }, [courseTitle])
   const {
