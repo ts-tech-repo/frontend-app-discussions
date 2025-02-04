@@ -30,6 +30,7 @@ const PostActionsBar = () => {
   const { enableInContextSidebar, page } = useContext(DiscussionContext);
 
   const handleCloseInContext = useCallback(() => {
+    console.log('Closing sidebar...');
     postMessageToParent('learning.events.sidebar.close');
   }, []);
 
