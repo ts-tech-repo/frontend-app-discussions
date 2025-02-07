@@ -30,6 +30,7 @@ const PostActionsBar = () => {
   const { enableInContextSidebar, page } = useContext(DiscussionContext);
 
   const handleCloseInContext = useCallback(() => {
+    window.parent.postMessage({ action: 'toggleDiscussionSection' }, '*'); 
     postMessageToParent('learning.events.sidebar.close');
   }, []);
 
